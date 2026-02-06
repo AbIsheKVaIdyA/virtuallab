@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MenuIcon from "@mui/icons-material/Menu";
 
-const Header = ({ onMenuClick }) => {
+const Header = ({ onMenuClick, onGoLanding }) => {
   return (
     <Box
       sx={{
@@ -39,6 +39,17 @@ const Header = ({ onMenuClick }) => {
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap={2} flexWrap="wrap">
+        <Typography
+          variant="body2"
+          onClick={onGoLanding}
+          sx={{
+            cursor: "pointer",
+            color: "text.secondary",
+            "&:hover": { color: "text.primary" },
+          }}
+        >
+          Back to Landing
+        </Typography>
         <TextField
           size="small"
           placeholder="Search labs, videos, tutorials"

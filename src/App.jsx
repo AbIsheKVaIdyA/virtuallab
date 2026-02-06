@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ScienceIcon from "@mui/icons-material/Science";
@@ -21,6 +21,7 @@ import Blogs from "./pages/Blogs";
 import Certifications from "./pages/Certifications";
 import Community from "./pages/Community";
 import Progress from "./pages/Progress";
+import Landing from "./pages/Landing";
 
 const drawerWidth = 260;
 
@@ -71,6 +72,17 @@ const App = () => {
 
   const [activePage, setActivePage] = useState("Dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showLanding, setShowLanding] = useState(
+    () => window.location.hash !== "#app"
+  );
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setShowLanding(window.location.hash !== "#app");
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const renderPage = () => {
     switch (activePage) {
@@ -103,6 +115,23 @@ const App = () => {
     setMobileOpen(false);
   };
 
+  const handleEnterPlatform = () => {
+    window.location.hash = "#app";
+  };
+
+  const handleGoLanding = () => {
+    window.location.hash = "#landing";
+  };
+
+  if (showLanding) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Landing onEnter={handleEnterPlatform} />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -124,7 +153,10 @@ const App = () => {
             ml: { md: `${drawerWidth}px` },
           }}
         >
-          <Header onMenuClick={() => setMobileOpen(true)} />
+          <Header
+            onMenuClick={() => setMobileOpen(true)}
+            onGoLanding={handleGoLanding}
+          />
           {renderPage()}
         </Box>
       </Box>
